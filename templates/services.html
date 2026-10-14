@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Services | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">A BETTER MATCH EXPERIENCE</div>
+    <h1>Services Designed Around You</h1>
+    <p>From private profiles to searchable member cards, choose the support that suits your journey.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap feature-grid">
+    <div class="feature"><div class="ico">♡</div><h3>Member Profiles</h3><p>Registered members appear in Community and Search when they choose to stay visible.</p></div>
+    <div class="feature"><div class="ico">☆</div><h3>Personalized Search</h3><p>Filter by gender, age, location, religion and education.</p></div>
+    <div class="feature"><div class="ico">+</div><h3>Shortlists</h3><p>Save favourite profiles after you log in. Hearts write to the database.</p></div>
+    <div class="feature"><div class="ico">*</div><h3>Privacy Controls</h3><p>Hide your profile from search on the Edit Profile page.</p></div>
+    <div class="feature"><div class="ico">#</div><h3>Mobile Experience</h3><p>Keep your search close with the original mobile-friendly layout.</p></div>
+    <div class="feature"><div class="ico">$</div><h3>Premium Membership</h3><p>Plan cards are visual only. Payments are not connected in this project.</p></div>
+  </div>
+</section>
+<section>
+  <div class="wrap content-card">
+    <h2>Choose a plan that fits your journey</h2>
+    <p>Plans shown here are sample UI content only. Connect a payment provider to make subscriptions functional. Registration itself is free and already working.</p>
+    <a class="btn primary" href="{{ url_for('register') }}">Get Started</a>
+  </div>
+</section>
+{% endblock %}

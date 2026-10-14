@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% from "macros.html" import profile_card with context %}
+{% block title %}Home | Shaadi.com{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">INDIA'S MOST TRUSTED MATRIMONIAL SERVICE</div>
+    <h1>Find Your Forever</h1>
+    <p>Create a real profile, search members in the database, and shortlist people you like.<br>Your next conversation can start here.</p>
+    <form class="finder" action="{{ url_for('search') }}" method="get">
+      <div class="field">
+        <label>I am a</label>
+        <select name="iam">
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Seeking a</label>
+        <select name="seeking">
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Age</label>
+        <select name="age">
+          <option>25 - 32</option>
+          <option>21 - 27</option>
+          <option>28 - 35</option>
+          <option>35 - 42</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Religion</label>
+        <select name="religion">
+          <option value="Any">Any</option>
+          <option>Hindu</option>
+          <option>Muslim</option>
+          <option>Sikh</option>
+          <option>Christian</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <input name="city" placeholder="Select City" list="cities">
+        <datalist id="cities">
+          {% for city in cities %}<option>{{ city }}</option>{% endfor %}
+        </datalist>
+      </div>
+      <button class="btn primary" type="submit">Search</button>
+    </form>
+  </div>
+</section>
+
+<div class="benefits">
+  <div class="wrap benefit-row">
+    <div class="benefit"><div class="ico">+</div><b>Real Registrations</b><span>Accounts saved to the database</span></div>
+    <div class="benefit"><div class="ico">♡</div><b>Working Search</b><span>Filter by age, city and more</span></div>
+    <div class="benefit"><div class="ico">*</div><b>Safe &amp; Secure</b><span>Hashed passwords and sessions</span></div>
+    <div class="benefit"><div class="ico">☆</div><b>Shortlists</b><span>Save profiles you like</span></div>
+    <div class="benefit"><div class="ico">?</div><b>Dedicated Support</b><span>Messages saved on Help</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker">POPULAR ON SHAADI</div>
+        <h2>Sample Stories</h2>
+        <p>Illustrative sample couples used for layout. These are not real testimonials.</p>
+      </div>
+      <a class="more" href="{{ url_for('stories') }}">View All Stories →</a>
+    </div>
+    <div class="cards">
+      {% for story in stories %}
+      <article class="card">
+        <img src="{{ story.image_url }}" alt="">
+        <div class="card-body">
+          <p>“{{ story.quote }}”</p>
+          <b>{{ story.couple_names }}</b><br>
+          <small>{{ story.city }} · Sample</small>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff9fa">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Popular Profiles</h2>
+        <p>Latest members from the database. Demo accounts are labeled.</p>
+      </div>
+      <a class="more" href="{{ url_for('community') }}">View All Profiles →</a>
+    </div>
+    {% if profiles %}
+    <div class="profiles">
+      {% for person in profiles %}
+        {{ profile_card(person, fav_ids) }}
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No public profiles yet. Register to be the first member.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

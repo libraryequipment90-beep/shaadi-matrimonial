@@ -105,6 +105,11 @@
 **/logs/
 
 # Environment and secrets
+instance/*.db
+instance/*.sqlite
+*.db
+*.sqlite3
+
 **/.env
 **/.env.local
 **/.env.*.local

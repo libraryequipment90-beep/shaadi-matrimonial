@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% from "macros.html" import profile_card, pager with context %}
+{% block title %}Search | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">YOUR JOURNEY STARTS HERE</div>
+    <h1>Find Your Perfect Match</h1>
+    <p>Search registered members using gender, age, religion, city, and education. Results come from the database, not static cards.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap content-grid">
+    <div class="content-card">
+      <h2>Partner Preferences</h2>
+      <form class="form-stack" method="post">
+        {{ form.hidden_tag() }}
+        <div>
+          {{ form.looking_for.label }}
+          {{ form.looking_for }}
+        </div>
+        <div>
+          {{ form.min_age.label }}
+          {{ form.min_age(placeholder="18") }}
+          {% for error in form.min_age.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.max_age.label }}
+          {{ form.max_age(placeholder="40") }}
+          {% for error in form.max_age.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.religion.label }}
+          {{ form.religion }}
+        </div>
+        <div>
+          {{ form.gotra.label }}
+          {{ form.gotra(placeholder="e.g. Kashyap") }}
+          {% for error in form.gotra.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.manglik.label }}
+          {{ form.manglik }}
+        </div>
+        <div>
+          {{ form.city.label }}
+          {{ form.city(placeholder="e.g. Delhi, Mumbai, Jaipur", list="cities") }}
+          <datalist id="cities">{% for city in cities %}<option>{{ city }}</option>{% endfor %}</datalist>
+        </div>
+        <div>
+          {{ form.district.label }}
+          {{ form.district(placeholder="e.g. Sonipat") }}
+          {% for error in form.district.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.education.label }}
+          {{ form.education }}
+        </div>
+        <button class="btn primary" type="submit">Search Profiles</button>
+      </form>
+    </div>
+    <div class="content-card">
+      <h2>Tips for better matches</h2>
+      <p>Keep your profile information complete and up to date.</p>
+      <p>Add a clear photo URL on Edit Profile if you want a picture to appear.</p>
+      <p>Choose preferences that matter most, while staying open to compatible matches.</p>
+      <p>Emails and passwords are never shown in search results.</p>
+      <div class="notice">Your own profile is excluded from search when you are logged in. Hidden profiles stay private.</div>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:24px">
+    {% if searched %}
+      <h2>{{ total }} profile{{ '' if total == 1 else 's' }} found</h2>
+    {% else %}
+      <h2>Latest public profiles</h2>
+    {% endif %}
+    {% if profiles %}
+      <div class="profiles" style="margin-top:16px">
+        {% for person in profiles %}
+          {{ profile_card(person, fav_ids) }}
+        {% endfor %}
+      </div>
+      {{ pager(page, pages, 'search') }}
+    {% else %}
+      <p class="empty">No profiles match these filters. Try a wider age range or leave city blank.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

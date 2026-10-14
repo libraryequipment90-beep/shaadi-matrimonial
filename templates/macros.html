@@ -1,0 +1,43 @@
+{% macro photo_url(profile) -%}
+{{ profile.photo_url if profile.photo_url else placeholder_photo }}
+{%- endmacro %}
+
+{% macro heart_form(user_id, is_on) %}
+  {% if current_user.is_authenticated %}
+    <form class="inline-form" method="post" action="{{ url_for('toggle_favourite', user_id=user_id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="heart-btn {{ 'on' if is_on else '' }}" type="submit" title="{{ 'Remove from shortlist' if is_on else 'Add to shortlist' }}">{{ '♥' if is_on else '♡' }}</button>
+    </form>
+  {% else %}
+    <a class="heart" href="{{ url_for('login', next=request.path) }}" title="Login to shortlist">♡</a>
+  {% endif %}
+{% endmacro %}
+
+{% macro profile_card(profile, fav_ids) %}
+<div class="profile">
+  <a href="{{ url_for('member_detail', user_id=profile.user_id) }}"><img class="avatar" src="{{ photo_url(profile) }}" alt=""></a>
+  <div>
+    <b><a class="name" href="{{ url_for('member_detail', user_id=profile.user_id) }}">{{ profile.full_name }}</a>{% if profile.user and profile.user.is_demo %}<span class="badge">Demo</span>{% endif %}</b>
+    <small>{{ profile.age }} yrs | {{ profile.religion }} | {{ profile.city }}</small>
+    <small style="margin-top:5px">{{ profile.education }} · {{ profile.profession }}</small>
+    <small style="margin-top:5px">Gotra: {{ profile.gotra or '—' }} | Manglik: {{ profile.manglik or '—' }}</small>
+  </div>
+  {{ heart_form(profile.user_id, profile.user_id in fav_ids) }}
+</div>
+{% endmacro %}
+
+{% macro pager(page, pages, endpoint) %}
+  {% if pages and pages > 1 %}
+    {% set qs = request.args.to_dict() %}
+    {% set _ = qs.pop('page', none) %}
+    <div class="pager">
+      {% if page > 1 %}
+        <a href="{{ url_for(endpoint, page=page-1, **qs) }}">Previous</a>
+      {% endif %}
+      <span class="current">{{ page }} / {{ pages }}</span>
+      {% if page < pages %}
+        <a href="{{ url_for(endpoint, page=page+1, **qs) }}">Next</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endmacro %}

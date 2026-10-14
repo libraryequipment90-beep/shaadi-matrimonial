@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Success Stories | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">POPULAR ON SHAADI</div>
+    <h1>Sample Stories</h1>
+    <p>These cards keep the original Success Stories layout. They are sample content stored in the database, not real testimonials or verified couples.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap">
+    <div class="cards">
+      {% for story in stories %}
+      <article class="card">
+        <img src="{{ story.image_url }}" alt="">
+        <div class="card-body">
+          <h3>{{ story.couple_names }}</h3>
+          <p>“{{ story.quote }}”</p>
+          <small>♥ {{ story.city }} · Sample</small>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

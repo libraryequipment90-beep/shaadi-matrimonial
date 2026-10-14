@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% from "macros.html" import photo_url with context %}
+{% block title %}Connections | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">YOUR CONNECTIONS</div>
+    <h1>Interests &amp; Connections</h1>
+    <p>Review interest requests you received and track the ones you sent. Emails and private account data are never shown here.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap content-card">
+    <h2>Requests received</h2>
+    {% if received %}
+      <div class="profiles">
+        {% for item in received %}
+        <div class="profile">
+          <a href="{{ url_for('member_detail', user_id=item.sender_id) }}"><img class="avatar" src="{{ photo_url(item.sender.profile) }}" alt=""></a>
+          <div>
+            <b><a class="name" href="{{ url_for('member_detail', user_id=item.sender_id) }}">{{ item.sender.profile.full_name }}</a>{% if item.sender.is_demo %}<span class="badge">Demo</span>{% endif %}</b>
+            <small>{{ item.sender.profile.age }} yrs | {{ item.sender.profile.religion }} | {{ item.sender.profile.city }}</small>
+            <small style="margin-top:5px">Status: <b>{{ item.status }}</b></small>
+            {% if item.status == 'pending' %}
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <form class="inline-form" method="post" action="{{ url_for('respond_interest', interest_id=item.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="action" value="accept">
+                <button class="btn primary" type="submit">Accept</button>
+              </form>
+              <form class="inline-form" method="post" action="{{ url_for('respond_interest', interest_id=item.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="action" value="decline">
+                <button class="btn" type="submit">Decline</button>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty">No interest requests yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section>
+  <div class="wrap content-card">
+    <h2>Interests you sent</h2>
+    {% if sent %}
+      <div class="profiles">
+        {% for item in sent %}
+        <div class="profile">
+          <a href="{{ url_for('member_detail', user_id=item.receiver_id) }}"><img class="avatar" src="{{ photo_url(item.receiver.profile) }}" alt=""></a>
+          <div>
+            <b><a class="name" href="{{ url_for('member_detail', user_id=item.receiver_id) }}">{{ item.receiver.profile.full_name }}</a>{% if item.receiver.is_demo %}<span class="badge">Demo</span>{% endif %}</b>
+            <small>{{ item.receiver.profile.age }} yrs | {{ item.receiver.profile.religion }} | {{ item.receiver.profile.city }}</small>
+            <small style="margin-top:5px">Status: <b>{{ item.status }}</b></small>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty">You have not sent any interest yet. Open a member profile and tap "Send interest".</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

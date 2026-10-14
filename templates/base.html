@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Shaadi.com{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="{{ url_for('home') }}">shaadi<small>.com</small></a>
+  <nav class="nav">
+    <a class="{{ 'active' if active=='home' else '' }}" href="{{ url_for('home') }}">Home</a>
+    <a class="{{ 'active' if active=='search' else '' }}" href="{{ url_for('search') }}">Search</a>
+    <a class="{{ 'active' if active=='stories' else '' }}" href="{{ url_for('stories') }}">Success Stories</a>
+    <a class="{{ 'active' if active=='services' else '' }}" href="{{ url_for('services') }}">Services</a>
+    <a class="{{ 'active' if active=='community' else '' }}" href="{{ url_for('community') }}">Community</a>
+    <a class="{{ 'active' if active=='help' else '' }}" href="{{ url_for('help') }}">Help</a>
+    {% if current_user.is_authenticated %}
+    <a class="{{ 'active' if active=='connections' else '' }}" href="{{ url_for('connections') }}">Connections</a>
+    {% endif %}
+  </nav>
+  <div class="actions">
+    {% if current_user.is_authenticated %}
+      <a class="btn {{ 'primary' if active=='profile' else '' }}" href="{{ url_for('profile') }}">My Profile</a>
+      <form class="logout-form" method="post" action="{{ url_for('logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn" type="submit">Logout</button>
+      </form>
+    {% else %}
+      <a class="btn" href="{{ url_for('login') }}">Login</a>
+      <a class="btn primary" href="{{ url_for('register') }}">Register Free</a>
+    {% endif %}
+  </div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flashes">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footgrid">
+      <div>
+        <div class="logo">shaadi<small>.com</small></div>
+        <p>India's Most Trusted Matrimonial Service<br>Helping people find meaningful connections since 1996.</p>
+        <p>This is an independent study project inspired by a matrimonial layout. It is not affiliated with Shaadi.com.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('search') }}">Search</a>
+        <a href="{{ url_for('stories') }}">Success Stories</a>
+        <a href="{{ url_for('services') }}">Services</a>
+        <a href="{{ url_for('community') }}">Community</a>
+        <a href="{{ url_for('help') }}">Help</a>
+      </div>
+      <div>
+        <h4>For Members</h4>
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('profile') }}">My Profile</a>
+          <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+          <a href="{{ url_for('connections') }}">Connections</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+          <a href="{{ url_for('register') }}">Register Free</a>
+        {% endif %}
+        <a href="{{ url_for('services') }}">Premium Membership</a>
+        <a href="{{ url_for('help') }}">FAQs</a>
+      </div>
+      <div>
+        <h4>About</h4>
+        <a href="{{ url_for('services') }}">About Us</a>
+        <a href="{{ url_for('help') }}">Contact Us</a>
+        <a href="{{ url_for('help') }}">Privacy & Safety</a>
+        <a href="{{ url_for('help') }}">Terms & Conditions</a>
+      </div>
+      <div>
+        <h4>Stay Connected</h4>
+        <p>Subscribe to our newsletter for updates and tips. Your email is saved locally. No email is sent.</p>
+        <form class="subscribe" method="post" action="{{ url_for('subscribe') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="email" name="email" placeholder="Enter your email address" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="copyright">
+      <span>&copy; 1996–{{ now_year }} Independent study project. All rights reserved.</span>
+      <span>Made with <b style="color:#ff174f">♥</b> in India</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

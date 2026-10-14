@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "macros.html" import profile_card, pager with context %}
+{% block title %}Community | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">MEET YOUR COMMUNITY</div>
+    <h1>Popular Profiles</h1>
+    <p>Browse member cards loaded from the database. Demo accounts are clearly labeled. These are not verified real people.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap">
+    {% if profiles %}
+    <div class="profiles">
+      {% for person in profiles %}
+        {{ profile_card(person, fav_ids) }}
+      {% endfor %}
+    </div>
+    {{ pager(page, pages, 'community') }}
+    {% else %}
+    <p class="empty">No public member profiles yet.</p>
+    {% endif %}
+    <p class="notice" style="margin-top:22px">Demo profiles are fictional development data. Emails and passwords are never shown here.</p>
+  </div>
+</section>
+{% endblock %}

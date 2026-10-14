@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Register Free | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">START SOMETHING BEAUTIFUL</div>
+    <h1>Create Your Free Profile</h1>
+    <p>Take the first step toward meeting someone special. Your details are saved to the database.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap" style="max-width:650px">
+    <div class="content-card">
+      <form class="form-stack" method="post">
+        {{ form.hidden_tag() }}
+        <div>{{ form.created_for.label }}{{ form.created_for }}</div>
+        <div>
+          {{ form.full_name.label }}
+          {{ form.full_name(placeholder="Enter your full name") }}
+          {% for error in form.full_name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.gender.label }}{{ form.gender }}
+        </div>
+        <div>
+          {{ form.date_of_birth.label }}
+          {{ form.date_of_birth }}
+          {% for error in form.date_of_birth.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.email.label }}
+          {{ form.email(placeholder="you@example.com") }}
+          {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.password.label }}
+          {{ form.password(placeholder="At least 8 characters") }}
+          {% for error in form.password.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.religion.label }}{{ form.religion }}
+        </div>
+        <div>
+          {{ form.gotra.label }}
+          {{ form.gotra(placeholder="e.g. Kashyap") }}
+          {% for error in form.gotra.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.manglik.label }}{{ form.manglik }}
+        </div>
+        <div>
+          {{ form.city.label }}
+          {{ form.city(placeholder="City", list="cities") }}
+          <datalist id="cities">{% for city in cities %}<option>{{ city }}</option>{% endfor %}</datalist>
+          {% for error in form.city.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.district.label }}
+          {{ form.district(placeholder="District") }}
+          {% for error in form.district.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.education.label }}{{ form.education }}
+        </div>
+        <div>
+          {{ form.profession.label }}
+          {{ form.profession(placeholder="e.g. Software Engineer") }}
+          {% for error in form.profession.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.work.label }}
+          {{ form.work(placeholder="Company or workplace") }}
+        </div>
+        <div>
+          {{ form.father_name.label }}
+          {{ form.father_name(placeholder="Father's name") }}
+        </div>
+        <div>
+          {{ form.father_occupation.label }}
+          {{ form.father_occupation(placeholder="Father's occupation") }}
+        </div>
+        <div>
+          {{ form.mother_name.label }}
+          {{ form.mother_name(placeholder="Mother's name") }}
+        </div>
+        <div>
+          {{ form.mother_occupation.label }}
+          {{ form.mother_occupation(placeholder="Mother's occupation") }}
+        </div>
+        <div>
+          {{ form.brothers.label }}
+          {{ form.brothers(min="0", max="20") }}
+          {% for error in form.brothers.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.sisters.label }}
+          {{ form.sisters(min="0", max="20") }}
+          {% for error in form.sisters.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.family_village.label }}
+          {{ form.family_village(placeholder="Native place / village") }}
+        </div>
+        <div>
+          {{ form.family_background.label }}
+          {{ form.family_background(placeholder="Family details") }}
+        </div>
+        <div>
+          {{ form.current_address.label }}
+          {{ form.current_address(placeholder="Current residential address") }}
+        </div>
+        <div>
+          {{ form.about_me.label }}
+          {{ form.about_me(placeholder="A short introduction") }}
+          {% for error in form.about_me.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <button class="btn primary" type="submit">Register Free</button>
+      </form>
+      <p class="notice">By registering, you agree to use this study project responsibly. Passwords are stored as hashes, never as plaintext. You must be at least 18.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

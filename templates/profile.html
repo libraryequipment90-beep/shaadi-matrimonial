@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% from "macros.html" import photo_url, profile_card with context %}
+{% block title %}My Profile | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">YOUR ACCOUNT</div>
+    <h1>My Profile</h1>
+    <p>This page is private to you. Email is shown here only because you are logged in.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap content-card">
+    <div class="detail">
+      <img src="{{ photo_url(profile) }}" alt="">
+      <div>
+        <h2>{{ profile.full_name }}{% if current_user.is_demo %}<span class="badge">Demo</span>{% endif %}</h2>
+        <p>{{ profile.age }} yrs · {{ profile.gender }} · {{ profile.religion }} · {{ profile.city }}</p>
+        <p>Profile completeness: {{ profile.completeness() }}%</p>
+        <div class="progress"><span style="width:{{ profile.completeness() }}%"></span></div>
+        <p><a class="btn primary" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+           <a class="btn" href="{{ url_for('member_detail', user_id=current_user.id) }}">Public view</a></p>
+        <div class="kv">
+          <b>Email</b><span>{{ current_user.email }}</span>
+          <b>Gotra</b><span>{{ profile.gotra or 'Not added yet.' }}</span>
+          <b>Manglik</b><span>{{ profile.manglik or 'Not added yet.' }}</span>
+          <b>Education</b><span>{{ profile.education }}</span>
+          <b>Occupation</b><span>{{ profile.profession }}</span>
+          <b>Work</b><span>{{ profile.work or 'Not added yet.' }}</span>
+          <b>Father's name</b><span>{{ profile.father_name or 'Not added yet.' }}</span>
+          <b>Father's occupation</b><span>{{ profile.father_occupation or 'Not added yet.' }}</span>
+          <b>Mother's name</b><span>{{ profile.mother_name or 'Not added yet.' }}</span>
+          <b>Mother's occupation</b><span>{{ profile.mother_occupation or 'Not added yet.' }}</span>
+          <b>Brothers / Sisters</b><span>{{ profile.brothers or 0 }} brother(s), {{ profile.sisters or 0 }} sister(s)</span>
+          <b>Family village</b><span>{{ profile.family_village or 'Not added yet.' }}</span>
+          <b>District</b><span>{{ profile.district or 'Not added yet.' }}</span>
+          <b>Family background</b><span>{{ profile.family_background or 'Not added yet.' }}</span>
+          <b>Current address</b><span>{{ profile.current_address or 'Not added yet.' }}</span>
+          <b>Visibility</b><span>{{ 'Visible in search' if profile.is_visible else 'Hidden from search' }}</span>
+          <b>About me</b><span>{{ profile.about_me or 'Not added yet.' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:24px">
+    <div class="section-head">
+      <div>
+        <h2>Shortlisted profiles</h2>
+        <p>Profiles you saved with the heart icon.</p>
+      </div>
+    </div>
+    {% if favs %}
+    <div class="profiles">
+      {% for person in favs %}
+        {{ profile_card(person, fav_ids) }}
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">You have not shortlisted anyone yet. Open Community and tap the heart.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

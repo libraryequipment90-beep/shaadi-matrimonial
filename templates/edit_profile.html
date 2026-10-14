@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">KEEP IT UP TO DATE</div>
+    <h1>Edit Profile</h1>
+    <p>Only you can edit this profile. Changes are saved to the database.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap" style="max-width:650px">
+    <div class="content-card">
+      <p>Profile completeness: {{ profile.completeness() }}%</p>
+      <div class="progress"><span style="width:{{ profile.completeness() }}%"></span></div>
+      <form class="form-stack" method="post">
+        {{ form.hidden_tag() }}
+        <div>{{ form.full_name.label }}{{ form.full_name }}{% for error in form.full_name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.gender.label }}{{ form.gender }}</div>
+        <div>{{ form.date_of_birth.label }}{{ form.date_of_birth }}{% for error in form.date_of_birth.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.religion.label }}{{ form.religion }}</div>
+        <div>{{ form.gotra.label }}{{ form.gotra }}{% for error in form.gotra.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.manglik.label }}{{ form.manglik }}</div>
+        <div>
+          {{ form.city.label }}
+          {{ form.city(list="cities") }}
+          <datalist id="cities">{% for city in cities %}<option>{{ city }}</option>{% endfor %}</datalist>
+          {% for error in form.city.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>{{ form.district.label }}{{ form.district }}{% for error in form.district.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.education.label }}{{ form.education }}</div>
+        <div>{{ form.profession.label }}{{ form.profession }}{% for error in form.profession.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.work.label }}{{ form.work }}{% for error in form.work.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.father_name.label }}{{ form.father_name }}{% for error in form.father_name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.father_occupation.label }}{{ form.father_occupation }}{% for error in form.father_occupation.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.mother_name.label }}{{ form.mother_name }}{% for error in form.mother_name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.mother_occupation.label }}{{ form.mother_occupation }}{% for error in form.mother_occupation.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.brothers.label }}{{ form.brothers(min="0", max="20") }}{% for error in form.brothers.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.sisters.label }}{{ form.sisters(min="0", max="20") }}{% for error in form.sisters.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.family_village.label }}{{ form.family_village }}{% for error in form.family_village.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.family_background.label }}{{ form.family_background }}{% for error in form.family_background.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.current_address.label }}{{ form.current_address }}{% for error in form.current_address.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>{{ form.about_me.label }}{{ form.about_me }}{% for error in form.about_me.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div>
+          {{ form.photo_url.label }}
+          {{ form.photo_url(placeholder="https://... one image URL") }}
+          {% for error in form.photo_url.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+          <p class="demo-note">Only one profile photo is allowed. Paste a single public image URL or leave blank for a placeholder. Cloud photo upload is not configured.</p>
+        </div>
+        <div class="checkbox-row">{{ form.is_visible() }} {{ form.is_visible.label }}</div>
+        <button class="btn primary" type="submit">Save changes</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

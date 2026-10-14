@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% from "macros.html" import photo_url, heart_form with context %}
+{% block title %}{{ person.full_name }} | Shaadi.com{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">MEMBER PROFILE</div>
+    <h1>{{ person.full_name }}</h1>
+    <p>Public profile details. Email, password, and other private account data are never shown here.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap content-card">
+    <div class="detail">
+      <img src="{{ photo_url(person) }}" alt="">
+      <div>
+        <h2>{{ person.full_name }}{% if member.is_demo %}<span class="badge">Demo</span>{% endif %}</h2>
+        <p>{{ person.age }} yrs · {{ person.gender }} · {{ person.religion }} · {{ person.city }}</p>
+        <div class="kv">
+          <b>Gotra</b><span>{{ person.gotra or 'Not added.' }}</span>
+          <b>Manglik</b><span>{{ person.manglik or 'Not added.' }}</span>
+          <b>Education</b><span>{{ person.education }}</span>
+          <b>Occupation</b><span>{{ person.profession }}</span>
+          <b>Work</b><span>{{ person.work or 'Not added.' }}</span>
+          <b>Father's name</b><span>{{ person.father_name or 'Not added.' }}</span>
+          <b>Father's occupation</b><span>{{ person.father_occupation or 'Not added.' }}</span>
+          <b>Mother's name</b><span>{{ person.mother_name or 'Not added.' }}</span>
+          <b>Mother's occupation</b><span>{{ person.mother_occupation or 'Not added.' }}</span>
+          <b>Brothers / Sisters</b><span>{{ person.brothers or 0 }} brother(s), {{ person.sisters or 0 }} sister(s)</span>
+          <b>Family village</b><span>{{ person.family_village or 'Not added.' }}</span>
+          <b>District</b><span>{{ person.district or 'Not added.' }}</span>
+          <b>Family background</b><span>{{ person.family_background or 'Not added.' }}</span>
+          <b>Current address</b><span>{{ person.current_address or 'Not added.' }}</span>
+          <b>About</b><span>{{ person.about_me or 'This member has not added a bio yet.' }}</span>
+        </div>
+        {% if is_owner %}
+          <p><a class="btn primary" href="{{ url_for('edit_profile') }}">Edit my profile</a></p>
+        {% elif current_user.is_authenticated %}
+          {{ heart_form(member.id, is_fav) }}
+          <form class="inline-form" method="post" action="{{ url_for('send_interest', user_id=member.id) }}" style="margin-left:12px">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn primary" type="submit">Send interest</button>
+          </form>
+        {% else %}
+          <p><a class="btn primary" href="{{ url_for('login', next=request.path) }}">Login to shortlist</a></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
