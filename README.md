@@ -141,6 +141,18 @@ DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/shaadi
 
 On startup the app also runs a small auto-migration that adds any newly introduced `profiles` columns to an existing database without dropping data. For full schema history, add Alembic.
 
+## SEO
+
+Every page includes per-page `<title>` and meta description, plus canonical URL, Open Graph and Twitter card tags, theme color and favicon. Public pages are `index, follow`; private pages (`/profile`, `/edit-profile`, `/connections`, `/login`) are `noindex, nofollow`.
+
+Also provided:
+
+- `GET /robots.txt` — allows crawlers, blocks private routes, points to the sitemap
+- `GET /sitemap.xml` — static pages plus every visible member profile
+- JSON-LD structured data: `WebSite` with SearchAction on all pages, `Person` on member profiles
+
+Canonical and Open Graph URLs are built from the request host, so they are correct in preview and production automatically. For production, serve the site over HTTPS so canonicals use the real domain.
+
 ## Security notes
 
 - Passwords are hashed with Werkzeug (PBKDF2).

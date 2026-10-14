@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 {% from "macros.html" import photo_url, heart_form with context %}
-{% block title %}{{ person.full_name }} | Shaadi.com{% endblock %}
+{% block title %}{{ person.full_name }}, {{ person.age }} yrs, {{ person.city }} | Matrimonial Profile{% endblock %}
+{% block description %}{{ person.full_name }} — {{ person.age }} years, {{ person.gender }}, {{ person.religion }}, {{ person.city }}. Education: {{ person.education }}. Explore this matrimonial profile on Shaadi.com.{% endblock %}
+{% block keywords %}{{ person.full_name }}, {{ person.city }} matrimonial, {{ person.religion }} bride groom, matrimonial profile{% endblock %}
+{% block og_type %}profile{% endblock %}
+{% block og_image %}{% if person.photo_url and person.photo_url.startswith('http') %}{{ person.photo_url }}{% else %}{{ site_url }}{{ person.photo_url if person.photo_url else placeholder_photo }}{% endif %}{% endblock %}
+{% block structured_data %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": {{ person.full_name | tojson }},
+    "gender": {{ person.gender | tojson }},
+    "jobTitle": {{ (person.profession or "") | tojson }},
+    "address": { "@type": "PostalAddress", "addressLocality": {{ person.city | tojson }} },
+    "description": {{ (person.about_me or "") | tojson }}
+  }
+  </script>
+{% endblock %}
 {% block content %}
 <section class="page-hero">
   <div class="wrap">

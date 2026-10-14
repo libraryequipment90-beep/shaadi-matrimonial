@@ -382,6 +382,43 @@ def test_mutual_interest_auto_connects(client, app):
         assert Interest.query.filter_by(sender_id=priya_id, receiver_id=mutual_id).first() is None
 
 
+def test_seo_tags_present(client, seeded):
+    home = client.get("/").get_data(as_text=True)
+    assert '<meta name="description"' in home
+    assert 'rel="canonical"' in home
+    assert 'property="og:title"' in home
+    assert 'property="og:description"' in home
+    assert 'name="twitter:card"' in home
+    assert '"@type": "WebSite"' in home
+    assert '<link rel="icon"' in home
+
+    search = client.get("/search").get_data(as_text=True)
+    assert "Search Matrimonial Profiles" in search
+    assert '<meta name="description"' in search
+
+    private = client.post(
+        "/register",
+        data=register_payload(email="seo.private@example.com"),
+        follow_redirects=True,
+    ).get_data(as_text=True)
+    assert 'content="noindex, nofollow"' in private or 'content="noindex, nofollow"' in client.get("/profile").get_data(as_text=True)
+
+
+def test_robots_and_sitemap(client, seeded):
+    robots = client.get("/robots.txt")
+    assert robots.status_code == 200
+    body = robots.get_data(as_text=True)
+    assert "Disallow: /profile" in body
+    assert "Sitemap:" in body
+
+    sitemap = client.get("/sitemap.xml")
+    assert sitemap.status_code == 200
+    xml = sitemap.get_data(as_text=True)
+    assert "<urlset" in xml
+    assert "/search" in xml
+    assert "/members/" in xml
+
+
 def test_connections_requires_login(client):
     response = client.get("/connections", follow_redirects=False)
     assert response.status_code in (302, 401)

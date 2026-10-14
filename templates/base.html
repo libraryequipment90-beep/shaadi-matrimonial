@@ -3,8 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{% block title %}Shaadi.com{% endblock %}</title>
+  <title>{% block title %}Shaadi.com | Matrimonial & Matchmaking{% endblock %}</title>
+  <meta name="description" content="{% block description %}Create a free matrimonial profile, search members by age, religion, city and community, and shortlist your matches.{% endblock %}">
+  <meta name="keywords" content="{% block keywords %}matrimonial, matrimony, marriage, brides, grooms, matrimonial profiles, matchmaking India{% endblock %}">
+  <meta name="author" content="Shaadi.com Study Project">
+  <meta name="theme-color" content="#ff174f">
+  <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:site_name" content="Shaadi.com">
+  <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ self.description() }}{% endblock %}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:image" content="{% block og_image %}{{ default_og_image }}{% endblock %}">
+  <meta property="og:locale" content="en_IN">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}{{ self.title() }}{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}{{ self.description() }}{% endblock %}">
+  <meta name="twitter:image" content="{% block twitter_image %}{{ self.og_image() }}{% endblock %}">
+
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Shaadi.com",
+    "url": {{ site_url | tojson }},
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {{ (site_url ~ "/search?city={search_term_string}") | tojson }},
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  {% block structured_data %}{% endblock %}
 </head>
 <body>
 <header class="topbar">

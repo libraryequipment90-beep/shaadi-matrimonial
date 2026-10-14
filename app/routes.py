@@ -34,10 +34,15 @@ PLACEHOLDER_PHOTO = "/static/avatar.svg"
 def register_routes(app):
     @app.context_processor
     def inject_globals():
+        site_url = request.url_root.rstrip("/")
+        canonical_url = site_url + request.path
         return {
             "cities": CITIES,
             "now_year": datetime.utcnow().year,
             "placeholder_photo": PLACEHOLDER_PHOTO,
+            "site_url": site_url,
+            "canonical_url": canonical_url,
+            "default_og_image": site_url + url_for("static", filename="favicon.svg"),
         }
 
     def favourite_ids():
@@ -522,6 +527,64 @@ def register_routes(app):
         else:
             flash("Please enter a valid email address.", "error")
         return redirect(request.referrer or url_for("home"))
+
+    @app.route("/robots.txt")
+    def robots_txt():
+        site = request.url_root.rstrip("/")
+        lines = [
+            "User-agent: *",
+            "Allow: /",
+            "Disallow: /profile",
+            "Disallow: /edit-profile",
+            "Disallow: /connections",
+            "Disallow: /login",
+            "Disallow: /logout",
+            "Disallow: /favourite/",
+            "Disallow: /interest/",
+            f"Sitemap: {site}/sitemap.xml",
+        ]
+        return app.response_class("\n".join(lines) + "\n", mimetype="text/plain")
+
+    @app.route("/sitemap.xml")
+    def sitemap_xml():
+        site = request.url_root.rstrip("/")
+        static_pages = [
+            ("home", 1.0),
+            ("search", 0.9),
+            ("community", 0.9),
+            ("stories", 0.7),
+            ("services", 0.7),
+            ("help", 0.6),
+            ("register", 0.6),
+        ]
+        urls = []
+        for endpoint, priority in static_pages:
+            urls.append((site + url_for(endpoint), priority, "weekly"))
+        members = (
+            db.session.query(Profile.user_id, Profile.updated_at)
+            .filter(Profile.is_visible.is_(True))
+            .order_by(Profile.updated_at.desc())
+            .limit(500)
+            .all()
+        )
+        for user_id, updated_at in members:
+            lastmod = updated_at.strftime("%Y-%m-%d") if updated_at else None
+            urls.append((f"{site}/members/{user_id}", 0.5, "daily", lastmod))
+
+        parts = ['<?xml version="1.0" encoding="UTF-8"?>',
+                 '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+        for item in urls:
+            loc, priority, changefreq = item[0], item[1], item[2]
+            lastmod = item[3] if len(item) > 3 else None
+            parts.append("<url>")
+            parts.append(f"<loc>{loc}</loc>")
+            if lastmod:
+                parts.append(f"<lastmod>{lastmod}</lastmod>")
+            parts.append(f"<changefreq>{changefreq}</changefreq>")
+            parts.append(f"<priority>{priority}</priority>")
+            parts.append("</url>")
+        parts.append("</urlset>")
+        return app.response_class("\n".join(parts), mimetype="application/xml")
 
     @app.route("/health")
     @csrf.exempt
